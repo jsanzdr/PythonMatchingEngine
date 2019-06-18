@@ -6,35 +6,35 @@ Created on Sat Jun 15 12:59:42 2019
 @author: paco
 """
 import sys
+import os
+sys.path.append(os.getcwd())
 sys.path.append('../')
 import time
 import pdb
 import numpy as np
 from market.gateway import Gateway
 from examples.algorithms import BuyTheBid, SimplePOV
-      
-
 
 # =============================================================================
 # TEST BUY THE BID ALGO
 # =============================================================================
 
-gtw = Gateway(ticker='ana',
-             year=2019,
-             month=5,
-             day=21,
-             latency=20000)
-    
-
-btb = BuyTheBid(1000000, 1)
-
-t = time.time()
-while (not btb.done) and (gtw.mkt_idx < gtw.mkt_nord-1):        
-    
-    btb.eval_and_act(gtw)
-    gtw.tick()
-    
-print(time.time()-t)
+#gtw = Gateway(ticker='ana',
+#             year=2019,
+#             month=5,
+#             day=21,
+#             latency=20000)
+#    
+#
+#btb = BuyTheBid(1000000, 1)
+#
+#t = time.time()
+#while (not btb.done) and (gtw.mkt_idx < gtw.mkt_nord-1):        
+#    
+#    btb.eval_and_act(gtw)
+#    gtw.tick()
+#    
+#print(time.time()-t)
 
 
 
@@ -42,12 +42,12 @@ print(time.time()-t)
 # TEST SIMPLE POV ALGO
 # =============================================================================
 
-gtw = Gateway(ticker='ana',
+gtw = Gateway(ticker='san',
              year=2019,
              month=5,
-             day=21,
-             start_h=14,
-             end_h=16,
+             day=23,
+             start_h=9,
+             end_h=17.5,
              latency=20000)
 
 pov_algo = SimplePOV(is_buy=True, target_pov=0.2, lmtpx=np.Inf,

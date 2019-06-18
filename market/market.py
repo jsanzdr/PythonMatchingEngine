@@ -28,7 +28,7 @@ class Market():
         self.band_prices = PRICES[band]
         self.max_tick = MAX_TICK[band]
         self.init_size = int(AVG_TRANSACTS[band])
-        self.inc = int(min(0.1 * AVG_TRANSACTS[band], 10))
+        self.inc = int(max(0.1 * AVG_TRANSACTS[band], 10))
         self.low_inc = 10
         # default day
         self.def_day = datetime(1970,1,1)
