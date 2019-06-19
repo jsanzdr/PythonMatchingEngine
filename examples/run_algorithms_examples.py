@@ -19,24 +19,22 @@ from examples.algorithms import BuyTheBid, SimplePOV
 # TEST BUY THE BID ALGO
 # =============================================================================
 
-#gtw = Gateway(ticker='ana',
-#             year=2019,
-#             month=5,
-#             day=21,
-#             latency=20000)
-#    
-#
-#btb = BuyTheBid(1000000, 1)
-#
-#t = time.time()
-#while (not btb.done) and (gtw.mkt_idx < gtw.mkt_nord-1):        
-#    
-#    btb.eval_and_act(gtw)
-#    gtw.tick()
-#    
-#print(time.time()-t)
+gtw = Gateway(ticker='ana',
+             year=2019,
+             month=5,
+             day=21,
+             latency=20000)
+    
 
+btb = BuyTheBid(1000000, 1)
 
+t = time.time()
+while (not btb.done) and (gtw.mkt_time < gtw.end_time):        
+    
+    btb.eval_and_act(gtw)
+    gtw.tick()
+    
+print(time.time()-t)
 
 # =============================================================================
 # TEST SIMPLE POV ALGO

@@ -3,8 +3,8 @@
 
 import pandas as pd
 
-from festivos_and_mid_close import FESTIVOS_BURSATILES
-from festivos_and_mid_close import MARKET_CLOSE_MID_DAY
+from .festivos_and_mid_close import FESTIVOS_BURSATILES
+from .festivos_and_mid_close import MARKET_CLOSE_MID_DAY
 
 
 def get_n_open_day(day, n_days=1):
