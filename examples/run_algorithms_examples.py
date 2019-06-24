@@ -7,25 +7,28 @@ Created on Sat Jun 15 12:59:42 2019
 """
 import sys
 import os
-sys.path.append(os.getcwd())
-sys.path.append('../')
 import time
-import pdb
 import numpy as np
 from market.gateway import Gateway
 from examples.algorithms import BuyTheBid, SimplePOV
+from datetime import datetime
+sys.path.append(os.getcwd())
+sys.path.append('../')
 
 # =============================================================================
 # TEST BUY THE BID ALGO
 # =============================================================================
 
-gtw = Gateway(ticker='ana',
-             year=2019,
-             month=5,
-             day=21,
-             latency=20000)
-    
+gtw_kwargs = {
+    'date': datetime(2019, 5, 21).date(),
+    'ticker': 'ana',
+    'start_h': 9,
+    'end_h': 17.5,
+    'latency': 20000,
+}
 
+gtw = Gateway(**gtw_kwargs)
+    
 btb = BuyTheBid(1000000, 1)
 
 t = time.time()
@@ -40,25 +43,31 @@ print(time.time()-t)
 # TEST SIMPLE POV ALGO
 # =============================================================================
 
-gtw = Gateway(ticker='san',
-             year=2019,
-             month=5,
-             day=23,
-             start_h=9,
-             end_h=17.5,
-             latency=20000)
+gtw_kwargs = {
+    'date': datetime(2019, 5, 23).date(),
+    'ticker': 'san',
+    'start_h': 9,
+    'end_h': 17.5,
+    'latency': 20000,
+}
 
-pov_algo = SimplePOV(is_buy=True, target_pov=0.2, lmtpx=np.Inf,
-                       qty=int(1e7), sweep_max=5)
+algo_kwargs = {
+    'is_buy': True,
+    'target_pov': 0.2,
+    'lmtpx': np.Inf,
+    'qty': int(1e7),
+    'sweep_max': 1,
+    'min_vol': 200,
+    'n_seconds': 1,
+}
+
+gtw = Gateway(**gtw_kwargs)
+
+pov_algo = SimplePOV(**dict(gtw_kwargs, **algo_kwargs))
 
 t = time.time()
-mkt_nord = gtw.mkt_nord-1
+
 while (not pov_algo.done) and (gtw.mkt_time < gtw.end_time):        
-    ord_in_queue = pov_algo.eval_and_act(gtw)
-    if ord_in_queue:  
-        #gtw.tick()
-        gtw.move_n_seconds(n_seconds=1)
-    else:
-        gtw.tick()
-        
+    pov_algo.eval_and_act(gtw)
+
 print(time.time()-t)

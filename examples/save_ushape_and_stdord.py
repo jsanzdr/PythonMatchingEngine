@@ -3,8 +3,6 @@
 
 import sys
 import os
-sys.path.append(os.getcwd())
-sys.path.append('../')
 import pandas as pd
 import numpy as np
 from datetime import datetime, timedelta
@@ -13,19 +11,21 @@ from configuration_yaml import Configuration
 from maching_engine_utils.df_from_supertrack import Supertrack
 import pickle
 from tqdm import tqdm
+sys.path.append(os.getcwd())
+sys.path.append('../')
 
 supertrack = Supertrack()
 window = 70
-from_date = datetime(2018,1,1)
+from_date = datetime(2018, 1, 1)
 today = datetime.now().date()
-tickers = (Configuration('../config/liq_bands.yml').config)
+tickers = Configuration('../config/liq_bands.yml').config
 tickers = list(tickers.keys())
 dates = get_open_days(from_date, today)
 
 file_name = './../../PythonMatchingEngineFork/data/ushape'
 try:
     with open(file_name, 'rb') as f:
-            ushape = pickle.load(f)
+        ushape = pickle.load(f)
 except FileNotFoundError:
     print('ushape not found')
     ushape = {'tickers': {ticker: dict() for ticker in tickers}}
@@ -33,7 +33,7 @@ except FileNotFoundError:
 file_name = './../../PythonMatchingEngineFork/data/std_ord'
 try:
     with open(file_name, 'rb') as f:
-            std_ord = pickle.load(f)
+        std_ord = pickle.load(f)
 except FileNotFoundError:
     print('std_ord not found')
     std_ord = {'tickers': {ticker: dict() for ticker in tickers}}
@@ -52,11 +52,13 @@ for ticker in tqdm(tickers):
 
             start_day = end_day.date() - timedelta(window)
     
-            qry = (f"select date, time, totvol, tottrd "
-                   f"from sibe_{end_day.year}.ushape_{end_day.year} "
-                   f"where symbol = '{ticker}' "
-                   f"and time <> 'clo' and time <> 'ope' "
-                   f"and date < '{end_day}' and date >= '{start_day}'")
+            qry = (
+                f"select date, time, totvol, tottrd "
+                f"from sibe_{end_day.year}.ushape_{end_day.year} "
+                f"where symbol = '{ticker}' "
+                f"and time <> 'clo' and time <> 'ope' "
+                f"and date < '{end_day}' and date >= '{start_day}'"
+            )
             
             df_year = supertrack.get_df_from_qry(qry=qry)
             

@@ -18,8 +18,9 @@ AVG_TRANSACTS = Configuration('../config/avg_band_transacts.yml').config
 PX_IDXS, PRICES, MAX_TICK = get_band_dicts([4,5,6])
 STATS = ['price', 'vol', 'agg_ord', 'pas_ord', 'timestamp']
 MY_STATS = ['price','vol','my_uid', 'timestamp']
-    
-class Market():
+
+
+class Market:
     
     def __init__(self, ticker, max_impact=20):
         band = TICKER_BANDS[ticker]
@@ -39,6 +40,24 @@ class Market():
         # keeps track of all orders sent to the market
         # allows fast access of orders status by uid
         self._orders = dict()                
+        self.n_my_orders = 0
+        self.ntrds = 0
+        self.my_ntrds = 0
+        self.cumvol = 0
+        self.my_cumvol = 0
+        self.cumturn = 0.
+        self.my_cumturn = 0.
+        self.cum_agg_effect = 0
+    
+    def reset_mkt(self, reset_all):
+        
+        if reset_all:
+            
+            self._bids = Bids()
+            self._asks = Asks()
+            self.create_stats_dict()
+            self._orders = dict()
+                
         self.n_my_orders = 0
         self.ntrds = 0
         self.my_ntrds = 0
